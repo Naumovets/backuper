@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/Naumovets/Backuper/internal/backup"
-	"github.com/Naumovets/Backuper/internal/backup/postgres"
-	"github.com/Naumovets/Backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/backup"
+	"github.com/Naumovets/backuper/internal/backup/postgres"
+	"github.com/Naumovets/backuper/internal/config"
 )
 
 type scheduler struct {

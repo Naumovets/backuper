@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/JCoupalK/go-pgdump"
-	"github.com/Naumovets/Backuper/internal/backup"
-	"github.com/Naumovets/Backuper/internal/config"
-	"github.com/Naumovets/Backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/backup"
+	"github.com/Naumovets/backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/logger"
 	"go.uber.org/zap"
 )
 

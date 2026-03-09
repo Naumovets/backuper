@@ -1,4 +1,4 @@
-module github.com/Naumovets/Backuper
+module github.com/Naumovets/backuper
 
 go 1.25.0
 
