@@ -1,0 +1,39 @@
+services:
+  backuper:
+    image: backuper:0.0.1
+    container_name: backuper_service
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./logs:/var/log
+      - ./backups:/backup
+    environment:
+      - TZ=UTC
+      - config_path=/app/config.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backuper_net
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: test_db
+    restart: always
+    environment:
+      - POSTGRES_DB=test_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d test_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backuper_net
+
+networks:
+  backuper_net:
+    driver: bridge
