@@ -1,0 +1,66 @@
+backuper:
+  name: "backuper"
+  version: 1.0
+
+  logging:
+    level: info
+    encoding: json
+    output_paths:
+      - stdout
+      - /var/log/app.log
+    error_output_paths:
+      - stderr
+      - /var/log/app.log
+    
+    # Optional if need rotation log files
+    rotation_settings:
+      max_size: 10      # MB
+      max_count: 5      # Keep max 5 log files
+      max_age: 30       # Days
+      compress: true    # Bool gzip compress
+      
+  postgres:
+    statistic_service_database:               # Unique name will use in result path for backups
+      host: db_host1                            
+      port: 5432                                
+      dbname: production_db_1                   
+      user: prod_user_1                         
+      password: prod_pass_1                     
+      sslkey: /path/to/host1/your.key           # Optional
+      sslcert: /path/to/host1/your.crt          # Optional
+      sslrootcert: /path/to/host1/your-root.crt # Optional
+      sslmode: verify-full                      # Optional. Default: disable
+      application_name: backuper                # Optional
+      compress: true                            # Optional
+      compress_level: 9                         # Optional. Compression level for gzip (0-9):
+                                                  # 0 = no compression
+                                                  # 1 = fastest, smallest compression
+                                                  # 6 = default (recommended)
+                                                  # 9 = best compression, slowest
+      internal: 43200                           # Make backup every 12 hours
+      max_count: 28                             # Keep backup for 2 weeks
+      timeformat: timestamp                     # Time format for backup filename:(timestamp | yyyy-mm-dd | yyyy-mm-dd-hh:mm:ss)
+      prefix_filename: dump                     # Prefix for backup filenames. 
+                                                  # The full name is generated as: {prefix_filename}_{dbname}_{timeformat}.sql.gz | {prefix_filename}_{dbname}_{timeformat}.sql
+                                                  # Example: dump_production_db_1_1772593036.sql.gz or backup_production_db_2_2025-03-04.sql
+      table_schema: public                      # Optional
+      table_prefix: v1                          # Optional
+      table_suffix: statistic                   # Optional
+      threads: 50                               # Parallels threads
+    payment_service_database: 
+      host: db_host2
+      port: 5432
+      dbname: production_db_2
+      user: prod_user_2
+      password: prod_pass_2
+      internal: 3600                            
+      max_count: 24    
+      timeformat: yyyy-mm-dd
+      prefix_filename: backup 
+      threads: 1                              
+
+  storage_config:
+    path: /path/to/backup/folder  # Full path for every db will be {path}/{name}/{prefix_filename}_{dbname}_{timeformat}.sql (.sql.gz if compress)
+
+
+
