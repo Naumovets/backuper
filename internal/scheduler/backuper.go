@@ -58,6 +58,11 @@ func start(ctx context.Context, backuper backup.Backuper, stop chan struct{}) {
 
 	log.Info("start backuper")
 
+	// Make initial backup immediately
+	if err := backuper.MakeBackup(ctx); err != nil {
+		log.Error("cannot make initial backup", zap.Error(err))
+	}
+
 	ticker := time.NewTicker(backuper.GetInterval())
 	defer ticker.Stop()
 
