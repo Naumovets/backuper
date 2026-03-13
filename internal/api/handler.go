@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/Naumovets/Backuper/internal/logger"
-	"github.com/Naumovets/Backuper/internal/services"
+	"github.com/Naumovets/backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/services"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

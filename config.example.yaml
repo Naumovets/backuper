@@ -59,6 +59,20 @@ backuper:
       prefix_filename: backup 
       threads: 1                              
 
+  mysql:
+    mysql_service_database:
+      host: mysql_host
+      port: 3306
+      dbname: test_db
+      user: user
+      password: password
+      compress: true
+      compress_level: 6
+      internal: 3600
+      max_count: 24
+      timeformat: timestamp
+      prefix_filename: mysql_backup
+
   storage_config:
     path: /path/to/backup/folder  # Full path for every db will be {path}/{name}/{prefix_filename}_{dbname}_{timeformat}.sql (.sql.gz if compress)
 

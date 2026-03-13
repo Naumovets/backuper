@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Naumovets/Backuper/internal/api"
-	"github.com/Naumovets/Backuper/internal/config"
-	clog "github.com/Naumovets/Backuper/internal/logger"
-	"github.com/Naumovets/Backuper/internal/scheduler"
-	"github.com/Naumovets/Backuper/internal/services"
+	"github.com/Naumovets/backuper/internal/api"
+	"github.com/Naumovets/backuper/internal/config"
+	clog "github.com/Naumovets/backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/scheduler"
+	"github.com/Naumovets/backuper/internal/services"
 	"go.uber.org/zap"
 )
 

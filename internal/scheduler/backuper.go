@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/Naumovets/Backuper/internal/backup"
-	"github.com/Naumovets/Backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/backup"
+	"github.com/Naumovets/backuper/internal/logger"
 	"go.uber.org/zap"
 )
 
@@ -57,6 +57,11 @@ func start(ctx context.Context, backuper backup.Backuper, stop chan struct{}) {
 	ctx = context.WithValue(ctx, logger.CtxKeyLogger, log)
 
 	log.Info("start backuper")
+
+	// Make initial backup immediately
+	if err := backuper.MakeBackup(ctx); err != nil {
+		log.Error("cannot make initial backup", zap.Error(err))
+	}
 
 	ticker := time.NewTicker(backuper.GetInterval())
 	defer ticker.Stop()

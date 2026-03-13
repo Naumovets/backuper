@@ -1,10 +1,8 @@
 package postgres
 
 import (
-	"compress/gzip"
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -13,9 +11,10 @@ import (
 	"time"
 
 	"github.com/JCoupalK/go-pgdump"
-	"github.com/Naumovets/Backuper/internal/backup"
-	"github.com/Naumovets/Backuper/internal/config"
-	"github.com/Naumovets/Backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/backup"
+	"github.com/Naumovets/backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/logger"
+	"github.com/Naumovets/backuper/pkg/compressor"
 	"go.uber.org/zap"
 )
 
@@ -63,7 +62,7 @@ func NewBackuper(pgConf config.PostgresConfig, storageConfig config.StorageConfi
 func (p *postgresBackup) MakeBackup(ctx context.Context) error {
 	log := logger.GetLogger(ctx)
 
-	log.Info("Start make backup database")
+	log.Info("Start make backup postgres database")
 
 	targetDir := filepath.Join(p.storageConf.Path, p.name)
 	if err := os.MkdirAll(targetDir, 0755); err != nil {
@@ -91,7 +90,7 @@ func (p *postgresBackup) MakeBackup(ctx context.Context) error {
 
 	if p.pgConf.Compress {
 		log.Info("Compressing backup")
-		compressedFile, err := p.compressFile(dumpFilename)
+		compressedFile, err := compressor.CompressFile(dumpFilename, p.pgConf.CompressLevel)
 		if err != nil {
 			log.Error("Failed to compress backup", zap.Error(err))
 		} else {
@@ -108,39 +107,6 @@ func (p *postgresBackup) MakeBackup(ctx context.Context) error {
 	}
 
 	return nil
-}
-
-func (p *postgresBackup) compressFile(filename string) (string, error) {
-	newFilename := filename + ".gz"
-	f, err := os.Open(filename)
-	if err != nil {
-		return "", err
-	}
-	defer f.Close()
-
-	out, err := os.Create(newFilename)
-	if err != nil {
-		return "", err
-	}
-	defer out.Close()
-
-	// Use specified compression level if valid, otherwise default
-	level := p.pgConf.CompressLevel
-	if level < 0 || level > 9 {
-		level = gzip.DefaultCompression
-	}
-
-	gw, err := gzip.NewWriterLevel(out, level)
-	if err != nil {
-		return "", err
-	}
-	defer gw.Close()
-
-	if _, err := io.Copy(gw, f); err != nil {
-		return "", err
-	}
-
-	return newFilename, nil
 }
 
 func (p *postgresBackup) runRetention(ctx context.Context, targetDir string) error {
