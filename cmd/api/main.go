@@ -1,6 +1,6 @@
 package main
 
-import "github.com/Naumovets/Backuper/internal/app"
+import "github.com/Naumovets/backuper/internal/app"
 
 func main() {
 	app := app.NewApp()

@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 
-	"github.com/Naumovets/Backuper/internal/logger"
+	"github.com/Naumovets/backuper/internal/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"go.uber.org/zap"

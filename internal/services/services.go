@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/Naumovets/Backuper/internal/config"
-	"github.com/Naumovets/Backuper/internal/domain"
+	"github.com/Naumovets/backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/domain"
 )
 
 type service struct {

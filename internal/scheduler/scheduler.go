@@ -4,9 +4,10 @@ import (
 	"context"
 	"sync"
 
-	"github.com/Naumovets/Backuper/internal/backup"
-	"github.com/Naumovets/Backuper/internal/backup/postgres"
-	"github.com/Naumovets/Backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/backup"
+	"github.com/Naumovets/backuper/internal/backup/mysql"
+	"github.com/Naumovets/backuper/internal/backup/postgres"
+	"github.com/Naumovets/backuper/internal/config"
 )
 
 type scheduler struct {
@@ -29,6 +30,12 @@ func NewScheduler(conf *config.Config) *scheduler {
 		pgbackuper := postgres.NewBackuper(pgConf, conf.Backuper.StorageConfig, name)
 		backupers = append(backupers, pgbackuper)
 		stopChs[pgbackuper.GetName()] = make(chan struct{})
+	}
+
+	for name, mysqlConf := range conf.Backuper.Mysql {
+		mysqlbackuper := mysql.NewBackuper(mysqlConf, conf.Backuper.StorageConfig, name)
+		backupers = append(backupers, mysqlbackuper)
+		stopChs[mysqlbackuper.GetName()] = make(chan struct{})
 	}
 
 	return &scheduler{

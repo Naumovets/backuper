@@ -20,6 +20,7 @@ type BackuperConfig struct {
 	Version       float64                   `yaml:"version"`
 	Logging       LoggingConfig             `yaml:"logging"`
 	Postgres      map[string]PostgresConfig `yaml:"postgres"`
+	Mysql         map[string]MysqlConfig    `yaml:"mysql"`
 	StorageConfig StorageConfig             `yaml:"storage_config"`
 }
 

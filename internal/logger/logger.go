@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/Naumovets/Backuper/internal/config"
+	"github.com/Naumovets/backuper/internal/config"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
